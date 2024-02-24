@@ -1,7 +1,12 @@
 # Diffusion of Thoughts
 
-![logo](fig/logo.png)
-![examples](fig/sample3_chain.gif)
+<p align = "center">
+<img src="fig/logo.png" width="100%" alt="logo" align=center />
+</p>
+
+<p align = "center">
+<img src="fig/sample3_chain.gif" width="75%" alt="examples" align=center loop=infinite/>
+</p>
 
 This repository contains code for training and evaluating the models in the paper [Diffusion of Thoughts: Chain-of-Thought Reasoning in Diffusion Language Models](https://arxiv.org/abs/2402.07754).
 
@@ -10,6 +15,14 @@ over traditional autoregressive models. We explore the integration of diffusion 
 - We propose Diffusion-of-Thought (DoT), allowing reasoning steps to diffuse over time through the diffusion process. In contrast to traditional autoregressive language models that make decisions in a left-to-right, token-by-token manner, DoT offers more flexibility in the trade-off between computation and reasoning performance. 
 - Additionally, DoT showcases promising self-correction abilities and benefits from existing reasoning-enhancing techniques like self-consistency decoding. Our findings contribute to the understanding and development of reasoning capabilities in diffusion language models.
 
+<p align = "center">
+<img src="fig/pipeline.png" width="95%" alt="pipeline" align=center />
+</p>
+<p align = "center">
+DoT pipeline demonstration.
+</p>
+
+Our implementation of DoT is mainly based on [DiffuSeq](https://github.com/Shark-NLP/DiffuSeq) (*DiffuSeq: Sequence to Sequence Text Generation With Diffusion Models*) and [Plaid](https://github.com/igul222/plaid) (*Likelihood-Based Diffusion Language Models*). Our tasks and dataset configurations primarily follow the guidelines set by [Implicit CoT](https://github.com/da03/implicit_chain_of_thought). Thanks for these excellent work!
 
 ## Setup
 All required packages can be found in requirements.txt. You can install them in a new environment with
@@ -75,9 +88,15 @@ python3 evaluation_batch.py --weights_path outputs/gsm8k-bs128-fix_src-cot-digit
 Pretrained checkpoints are under policy checking and we will release them as soon as possible...
 
 ## More Cases
-![example1](fig/sample1_chain.gif)
-![example2](fig/sample2_chain.gif)
-![example3](fig/sample3_chain.gif)
+<p align = "center">
+<img src="fig/sample1_chain.gif" width="75%" alt="example1" align=center loop=infinite/>
+</p>
+<p align = "center">
+<img src="fig/sample2_chain.gif" width="75%" alt="example2" align=center loop=infinite/>
+</p>
+<p align = "center">
+<img src="fig/sample3_chain.gif" width="75%" alt="example3" align=center loop=infinite/>
+</p>
 
 ## Citation
 ```
