@@ -83,8 +83,89 @@ python3 evaluation_batch.py --weights_path outputs/gsm8k-bs128-fix_src-digit-ste
 python3 evaluation_batch.py --weights_path outputs/gsm8k-bs128-fix_src-cot-digit-steps31000 --fix_src --digit --cot --dataset gsm8k --score_temp 0.5
 
 ```
+
+
+Pretrained checkpoints are under policy checking and we will release them as soon as possible...
+
 ## Finetuning from SEDD
-Please refer to https://github.com/Lemaqwq/Score-Entropy-Discrete-Diffusion/tree/publish for details. 
+### Environment Setup
+#### 🐳 Docker
+
+We recommend to setup the environment with our docker [image](https://hub.docker.com/r/simonlemaqwq/sedd), which will prepare the whole environment and ease your reproduction with minimal effort.
+
+```bash
+# Pull the image for finetuning on LLaMA2 from dockerhub
+docker pull simonlemaqwq/sedd:v2.0
+
+# Start the container, remember to replace <PROJECT_DIR> with your own project directory
+docker run \
+    --name sedd \
+    --gpus all \
+    --network=host \
+    -v <PROJECT_DIR>:/workspace \
+    -it simonlemaqwq/sedd:v2.0 /bin/bash
+
+# Switch to the branch for Diffusion of Thoughts - SEDD
+cd /workspace
+git checkout dot-sedd
+```
+
+
+#### 🐍 Conda
+If you use the above docker image, this step can be skipped, because the conda env has been well prepared in it. Please also refer to the original <a href="https://github.com/louaaron/Score-Entropy-Discrete-Diffusion" target="_blank">SEDD</a> repo for more detailed conda environment setup instruction!
+```bash
+# Create and activate conda environment
+conda env create -f environment.yml
+conda activate sedd
+
+# Install required dependencies
+pip install -r requirements.txt
+```
+
+### Dataset Preparation
+Download data from here: [GSM8k-Aug data](https://github.com/da03/implicit_chain_of_thought/tree/main/data) and put them in `./data/gsm8k`
+
+Parse the dataset:
+```bash
+python parse_dataset.py --input_dir data/gsm8k --output_dir data/gsm8k
+```
+
+
+### Finetune
+All configurations for finetuning should be set in `configs/config.yaml`.
+
+Switch to `DoT` or `DoT_MP` as follows:
+```yaml
+data:
+  multipass: False # (Ture if use DoT_MP)
+```
+
+Then simply run:
+```bash
+python finetune.py
+```
+
+This creates a new directory `direc=exp_local/DATE/TIME` and saves the checkpoint and log.
+
+### Inference
+Specify the `--model_path` in the script before sampling.
+```bash
+# e.g. --model_path /workspace/exp_local/gsm8k/<date>/<ckpt_dir>
+
+# For DoT:
+bash run_sample_cond.sh
+
+# For DoT-MP
+bash run_sample_cond_mp.sh
+```
+
+### Evaluation
+Specify the `--generated_output_path` in the script.
+```bash
+# e.g. --generated_output_path generated_output/gsm8k/<ckpt_dir>
+bash run_cal_accuracy.sh
+```
+
 
 ## More Cases
 <p align = "center">
