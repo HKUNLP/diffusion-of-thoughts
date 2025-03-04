@@ -83,9 +83,8 @@ python3 evaluation_batch.py --weights_path outputs/gsm8k-bs128-fix_src-digit-ste
 python3 evaluation_batch.py --weights_path outputs/gsm8k-bs128-fix_src-cot-digit-steps31000 --fix_src --digit --cot --dataset gsm8k --score_temp 0.5
 
 ```
-
-
-Pretrained checkpoints are under policy checking and we will release them as soon as possible...
+## Finetuning from SEDD
+Please refer to https://github.com/Lemaqwq/Score-Entropy-Discrete-Diffusion/tree/publish for details. 
 
 ## More Cases
 <p align = "center">
