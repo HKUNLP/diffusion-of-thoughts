@@ -1,0 +1,74 @@
+defaults:
+  - _self_
+  - model: small
+  - override hydra/launcher: submitit_slurm
+
+ngpus: 4
+tokens: 50257
+
+training:
+  block_size: 128
+  batch_size: 256
+  accum: 1
+  n_iters: 120000
+  snapshot_freq: 60000
+  log_freq: 100
+  eval_freq: 100
+  snapshot_freq_for_preemption: 10000
+  weight: standard
+  snapshot_sampling: True
+  ema: 0.9999
+
+data:
+  train: gsm8k
+  valid: gsm8k
+  cache_dir: data
+  multipass: False
+  hidden_thought: False
+
+graph:
+  type: absorb
+  file: data
+  report_all: False
+
+noise:
+  type: loglinear
+  sigma_min: 1e-4
+  sigma_max: 20
+
+sampling:
+  predictor: euler
+  steps: 128
+  noise_removal: True
+
+eval:
+  batch_size: 128
+  perplexity: True
+  perplexity_batch_size: 8
+
+optim:
+  weight_decay: 0
+  optimizer: AdamW
+  lr: 3e-4
+  beta1: 0.9
+  beta2: 0.999
+  eps: 1e-8
+  warmup: 2500
+  grad_clip: 1.
+
+
+hydra:
+  run:
+    dir: exp_local/${data.train}/${now:%Y.%m.%d}/${now:%H%M%S}
+  sweep:
+    dir: exp/${data.train}/${now:%Y.%m.%d}/${now:%H%M%S}
+    subdir: ${hydra.job.num}
+  launcher:
+    max_num_timeout: 1000000
+    # timeout_min: 10079
+    partition: g40x
+    account: stanford
+    mem_gb: 96
+    cpus_per_task: 40
+    gpus_per_node: ${ngpus}
+    constraint: null
